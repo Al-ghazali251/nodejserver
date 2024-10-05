@@ -32,6 +32,21 @@ router.get('/fetch_stores', async (req, res) => {
 });
 
 
+router.get('/fetch_campus', async (req, res) => {
+    try {
+        let campus;
+        campus = await Product.find({
+            campus:"Main Campus"
+        });
+        res.status(200).json(campus);
+    } catch (err) {
+        res.status(500).json({
+            "message": err.message
+        });
+    }
+});
+
+
 
 router.post('/save_users', async (req, res) => {
     const user = new User({
@@ -55,7 +70,7 @@ router.post('/save_users', async (req, res) => {
 // Allow users add to favorites
 router.post('/favorites/:userId', async (req, res) => {
     const { userId } = req.params;
-    const { productId } = req.body;  // The product ID is expected in the request body
+     const productId = req.body.id;// The product ID is expected in the request body
 
     try {
         // Find the user by ID
@@ -82,9 +97,9 @@ router.post('/favorites/:userId', async (req, res) => {
 
 //Remove items from favorites
 
-router.delete('/favorites/:userId', async (req, res) => {
+router.delete('/favorites/:userId/:productId', async (req, res) => {
     const { userId } = req.params;
-    const { productId } = req.body;  // The product ID is expected in the request body
+    const { productId } = req.params;  // The product ID is expected in the request body
 
     try {
         // Find the user by ID
